@@ -1,4 +1,4 @@
-package iceandfire;
+package iceandfire.de.frontend.test;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
