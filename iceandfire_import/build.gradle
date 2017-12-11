@@ -1,0 +1,37 @@
+
+// Apply the java plugin to add support for Java
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+	mavenCentral()
+    jcenter()
+}
+
+// In this section you declare the dependencies for your production and test code
+dependencies {
+  
+  	
+	compile 'org.springframework.boot:spring-boot-starter-web:1.5.8.RELEASE'
+  	compile 'org.springframework.boot:spring-boot-starter-actuator:1.5.8.RELEASE'
+  	compile 'org.springframework.boot:spring-boot-starter-cache:1.5.8.RELEASE'
+  	compile group: 'org.springframework', name: 'spring-oxm', version: '4.3.12.RELEASE'
+  	
+
+	compile group: 'commons-collections', name: 'commons-collections', version: '3.2.2'
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+  	
+  	compile 'com.google.guava:guava:23.0'
+    compile 'org.slf4j:slf4j-api:1.7.21'
+	 
+   
+    testCompile 'junit:junit:4.12'
+}
+
+jar {
+	baseName = 'iceandfire_import'
+	version = '1.0'
+}

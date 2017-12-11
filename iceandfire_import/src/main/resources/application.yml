@@ -1,0 +1,5 @@
+iceandfire:
+    houses:
+        baseUrl: https://www.anapioficeandfire.com/api/houses/
+    characters:
+        baseUrl: https://www.anapioficeandfire.com/api/characters/
