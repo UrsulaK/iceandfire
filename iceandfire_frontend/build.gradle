@@ -25,5 +25,8 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '1.5.9.RELEASE'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+	compile group: 'org.webjars', name: 'jquery', version: '2.2.4'
+	compile group: 'org.webjars', name: 'bootstrap', version: '3.3.7'
 }
