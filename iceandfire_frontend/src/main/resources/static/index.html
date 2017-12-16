@@ -4,30 +4,47 @@
 		<title>Fire and Ice</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
+		<link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
 		<script type="text/javascript" src="/webjars/jquery/2.2.4/jquery.min.js"></script>
 		<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="/js/index.js"></script>
 	</head>
-	<body>
-		<div class="jumbotron">
-			<div class="container">
-			 <h2>Fire and Ice Suche</h2>
-			</div>
-		</div>
+<body>
+	<div class="jumbotron">
 		<div class="container">
-			<div class="form-group">
-			    <label for="region">Region auswählen</label>
-			    <select class="form-control" id="region">
-			      <option>The North</option>
-			      <option>Iron Islands</option>
-			      <option>3</option>
-			      <option>4</option>
-			      <option>5</option>
-			    </select>
-			 </div>
+			<h2>Fire and Ice Suche</h2>
+		</div>
+	</div>
+	<div class="container">
+		<div class="form-group">
+			<label for="region">Region auswählen</label> 
+			<select class="form-control" id="region">
+				<option value="north">The North</option>
+				<option value="iron">Iron Islands</option>
+				<option value="vale">The Vale</option>
+				<option value="westerlands">The Westerlands</option>
+				<option value="crownlands">The Crownlands</option>
+				<option value="reach">The Reach</option>
+				<option value="stormlands">The Stormlands</option>
+				<option value="dorne">Dorne</option>
+			</select>
+		</div>
+		<div class="row">
+			<div class="col-sm-2">
+				<a id="search" class="btn btn-success" >
+					<span class="glyphicon glyphicon-search"> Suchen</span>
+				</a>
+			
+			</div>
+		
 		</div>
 		
-	</body>
+		<div>&#160;</div>
+		<table class="table table-striped">
+			<tbody id="content"></tbody>
+		</table>
+	</div>
+
+</body>
 
 </html>
