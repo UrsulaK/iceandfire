@@ -2,7 +2,7 @@ package iceandfire.de.service.api;
 
 import java.util.List;
 
-public class Character {
+public class ApiCharacter {
 
 	private String url;
 	private String name;

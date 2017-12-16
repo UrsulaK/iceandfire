@@ -20,7 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.google.common.net.UrlEscapers;
 
-import iceandfire.de.service.api.House;
+import iceandfire.de.service.api.ApiHouse;
 
 @Service
 public class IceAndFireService {
@@ -57,28 +57,28 @@ public class IceAndFireService {
 		return null;
 	}
 	
-	public House getHouseById(String id){
+	public ApiHouse getHouseById(String id){
 		
 		String url = housesBaseUrl + id;
-		House house = getIceAndFireType(url, House.class);
+		ApiHouse house = getIceAndFireType(url, ApiHouse.class);
 		
 		return house;
 	}
 	
-	public iceandfire.de.service.api.Character getCharacterById(String id){
+	public iceandfire.de.service.api.ApiCharacter getCharacterById(String id){
 		String url = charactersBaseUrl + id;
-		iceandfire.de.service.api.Character character = getIceAndFireType(url, iceandfire.de.service.api.Character.class);
+		iceandfire.de.service.api.ApiCharacter character = getIceAndFireType(url, iceandfire.de.service.api.ApiCharacter.class);
 		return character;
 	}
 	
-	public List<House> searchHousesByRegion(String region, String page, String pageSize){
+	public List<ApiHouse> searchHousesByRegion(String region, String page, String pageSize){
 		String encodedRegion = "";
 		
 		encodedRegion = UrlEscapers.urlFragmentEscaper().escape(region);
 
 		String url = housesBaseUrl + "?region=" + encodedRegion + "&page=" + page + "&pageSize=" + pageSize;
 		
-		House[] houses = getIceAndFireType(url, House[].class);
+		ApiHouse[] houses = getIceAndFireType(url, ApiHouse[].class);
 		if(houses != null){
 			return Arrays.asList(houses);
 		}
