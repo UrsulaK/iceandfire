@@ -32,18 +32,9 @@ public class IceAndFireController {
 				.orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
 	}
 	
-	@CrossOrigin
-	@RequestMapping(value="/characters/character/{id}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<?> getCharacterById(@PathVariable(name = "id", required = true) final String id){
-		
-		
-		return Optional.ofNullable(iceAndFireService.getCharacterById(id))
-				.map(result -> new ResponseEntity<>(result, HttpStatus.OK))
-				.orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
-	}
 	
 	@CrossOrigin
-	@RequestMapping(value="/houses/{region}/{page}/{pageSize}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE})
+	@RequestMapping(value="search/houses/{region}/{page}/{pageSize}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<?> searchHousesByRegion(@PathVariable(name = "region", required = true) final String region,
 													@PathVariable(name = "page", required = true) final String page,
 													@PathVariable(name = "pageSize", required = true) final String pageSize){
@@ -52,5 +43,24 @@ public class IceAndFireController {
 		return Optional.ofNullable(iceAndFireService.searchHousesByRegion(region, page, pageSize))
 				.map(result -> new ResponseEntity<>(result, HttpStatus.OK))
 				.orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+	}
+	
+	@CrossOrigin
+	@RequestMapping(value="/houses/{region}/{page}/{pageSize}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<?> getHousesByRegion(@PathVariable(name = "region", required = true) final String region,
+													@PathVariable(name = "page", required = true) final String page,
+													@PathVariable(name = "pageSize", required = true) final String pageSize){
+		
+		
+		return Optional.ofNullable(iceAndFireService.getHousesByRegion(region, page, pageSize))
+				.map(result -> new ResponseEntity<>(result, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+	}
+	
+	@CrossOrigin
+	@RequestMapping(value="/import", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<?> importIceAndFireData(){
+		
+		return new ResponseEntity<>(iceAndFireService.importFireAndIceData(), HttpStatus.OK);
 	}
 }

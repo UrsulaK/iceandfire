@@ -1,8 +1,10 @@
 package iceandfire.de.service.implementation;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,7 +23,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.google.common.net.UrlEscapers;
 
+import iceandfire.de.service.api.ApiCharacter;
 import iceandfire.de.service.api.ApiHouse;
+import iceandfire.de.service.configuration.IceAndFireConfig;
+import iceandfire.de.service.converter.IceAndFireConverter;
+import iceandfire.de.service.db.House;
+import iceandfire.de.service.db.SwornMember;
 
 @Service
 public class IceAndFireService {
@@ -30,12 +38,11 @@ public class IceAndFireService {
 	@Autowired
 	@Qualifier("restTemplate")
 	private RestTemplate restTemplate;
-	
-	@Value("${iceandfire.houses.baseUrl}")
-	private String housesBaseUrl;
-	
-	@Value("${iceandfire.characters.baseUrl}")
-	private String charactersBaseUrl;
+	@Autowired
+	private IceAndFireConverter converter;
+
+	@Autowired
+	IceAndFireConfig iceAndFireConfig;
 	
 	@SuppressWarnings("unchecked")
 	public <T> T getIceAndFireType(final String url, final Class<T> apiClass){
@@ -50,23 +57,46 @@ public class IceAndFireService {
 			HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
 
 			ResponseEntity<T[]> response = (ResponseEntity<T[]>) restTemplate.exchange(uri, HttpMethod.GET, entity, apiClass);
-			return (T) response.getBody();
+			if(response.getStatusCode().equals(HttpStatus.OK)){
+				return (T) response.getBody();
+			}else{
+				LOG.info("not possible to get Objetc from url: " + url + " and object type: " + apiClass.getName() + " Status Code: " + response.getStatusCode() );
+				return null;
+			}
 		} catch (Exception e) {
 			LOG.error("Error on getting Object with url: " + url + " and object type: " + apiClass.getName(), e);
 		}
 		return null;
 	}
-	
+	public <T> ResponseEntity<T> postIceAndFireType(final String url, Object request, final Class<T> apiClass){
+		try {
+			UriComponentsBuilder componentsBuilder = UriComponentsBuilder.fromHttpUrl(url);
+			UriComponents components = componentsBuilder.build(true);
+			URI uri = components.toUri();
+			ResponseEntity<T> response = restTemplate.postForEntity(uri, request, apiClass);
+			if(response.getStatusCode().equals(HttpStatus.CREATED)){
+				return response;
+			}else{
+				LOG.info("not possible to get Objetc from url: " + url + " and object type: " + apiClass.getName() + " Status Code: " + response.getStatusCode() );
+				return null;
+			}
+			
+			
+		} catch (Exception e) {
+			LOG.error("Error on post request for Object with url: " + url + " and object type: " + apiClass.getName(), e);
+		}
+		
+		return null;
+	}
 	public ApiHouse getHouseById(String id){
 		
-		String url = housesBaseUrl + id;
+		String url = iceAndFireConfig.getHousesBaseUrl() + id;
 		ApiHouse house = getIceAndFireType(url, ApiHouse.class);
 		
 		return house;
 	}
 	
-	public iceandfire.de.service.api.ApiCharacter getCharacterById(String id){
-		String url = charactersBaseUrl + id;
+	public iceandfire.de.service.api.ApiCharacter getCharacter(String url){
 		iceandfire.de.service.api.ApiCharacter character = getIceAndFireType(url, iceandfire.de.service.api.ApiCharacter.class);
 		return character;
 	}
@@ -76,12 +106,51 @@ public class IceAndFireService {
 		
 		encodedRegion = UrlEscapers.urlFragmentEscaper().escape(region);
 
-		String url = housesBaseUrl + "?region=" + encodedRegion + "&page=" + page + "&pageSize=" + pageSize;
+		String url = iceAndFireConfig.getHousesBaseUrl() + "?region=" + encodedRegion + "&page=" + page + "&pageSize=" + pageSize;
 		
 		ApiHouse[] houses = getIceAndFireType(url, ApiHouse[].class);
 		if(houses != null){
 			return Arrays.asList(houses);
 		}
 		return null;
+	}
+	
+	public List<House> getHousesByRegion(String region, String page, String pageSize){
+		List<House> houses = new ArrayList<>();
+		List<ApiHouse> apiHouses = searchHousesByRegion(region, page, pageSize);
+		if(apiHouses != null){
+			for(ApiHouse apiHouse : apiHouses){
+				House house = converter.convertApiHouseToHouse(apiHouse);
+				for(String url : apiHouse.getSwornMembers()){
+					ApiCharacter character = getCharacter(url);
+					if(character != null){
+						SwornMember swornMember = converter.convertApiCharacterToSwornMember(character);
+						
+						ResponseEntity<SwornMember> responseEntity = postIceAndFireType("http://localhost:8082/swornMembers", swornMember, SwornMember.class);
+						if(responseEntity != null){
+							String location = responseEntity.getHeaders().getLocation().toString();
+							house.getSwornMembers().add(location);
+						}
+					}
+				}
+				postIceAndFireType("http://localhost:8082/houses", house, House.class);
+				houses.add(house);
+				
+			}
+		}
+		return houses;
+	}
+	
+	public boolean importFireAndIceData(){
+		
+		Map<String, Integer> regions = iceAndFireConfig.getRegions();
+		
+			for(String region : regions.keySet()){
+				for(int i=1; i<= regions.get(region); i++){
+					String page = String.valueOf(i);
+					getHousesByRegion(region, page, "10");
+				}
+			}
+		return true;
 	}
 }

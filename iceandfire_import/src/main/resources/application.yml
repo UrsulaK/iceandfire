@@ -3,3 +3,13 @@ iceandfire:
         baseUrl: https://www.anapioficeandfire.com/api/houses/
     characters:
         baseUrl: https://www.anapioficeandfire.com/api/characters/
+    regions:
+        The North: 7
+        Iron Islands: 4
+        The Riverlands: 6
+        The Vale: 4
+        The Westerlands: 6
+        The Crownlands: 5
+        The Reach: 8
+        The Stormlands: 4
+        Dorne: 3
