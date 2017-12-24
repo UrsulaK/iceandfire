@@ -21,7 +21,7 @@ $(document).ready(function(){
 				var td2 = $("<td/>")
 				var swornMembers = data[i].swornMembers;
 				for(var j=0; j<swornMembers.length; j++){
-					td2.append($("<div class='text-muted' />").text(swornMembers[j]));
+					td2.append($("<div class='text-muted' />").text( swornMembers[j]));
 				}
 				
 				tr.append(td);
