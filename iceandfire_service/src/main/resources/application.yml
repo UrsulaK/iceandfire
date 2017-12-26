@@ -1,0 +1,8 @@
+server:
+  port: 8084
+
+iceandfire:
+    houses:
+        dbUrl: http://localhost:8082/houses/search/
+    swornMembers:
+        dbUrl: http://localhost:8082/swornMembers/search/
