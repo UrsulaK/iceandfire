@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import iceandfire.de.service.implementation.IceAndFireService;
+import iceandfire.de.service.implementation.IceAndFireImportService;
 
 @RestController
 @RequestMapping("/iceandfire")
 public class IceAndFireController {
 	
 	@Autowired
-	private IceAndFireService iceAndFireService;
+	private IceAndFireImportService iceAndFireService;
 	
 	@CrossOrigin
 	@RequestMapping(value="/houses/house/{id}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE})

@@ -14,7 +14,8 @@
 include 'shared'
 include 'api'
 include 'services:webservice'
-includeFlat 'iceandfire_db'
+
+
 */
 
 rootProject.name = 'iceandfire_import'

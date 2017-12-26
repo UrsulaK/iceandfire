@@ -32,6 +32,12 @@ public class IceAndFireConfig {
 	@Value("${iceandfire.characters.baseUrl}")
 	private String charactersBaseUrl;
 	
+	@Value("${iceandfire.houses.dbUrl}")
+	private String housesDbUrl;
+	
+	@Value("${iceandfire.characters.dbUrl}")
+	private String charactersDbUrl;
+	
 	private HashMap<String, Integer> regions;
 	
 	@Primary
@@ -73,6 +79,18 @@ public class IceAndFireConfig {
 	}
 	public void setCharactersBaseUrl(String charactersBaseUrl) {
 		this.charactersBaseUrl = charactersBaseUrl;
+	}
+	public String getHousesDbUrl() {
+		return housesDbUrl;
+	}
+	public void setHousesDbUrl(String housesDbUrl) {
+		this.housesDbUrl = housesDbUrl;
+	}
+	public String getCharactersDbUrl() {
+		return charactersDbUrl;
+	}
+	public void setCharactersDbUrl(String charactersDbUrl) {
+		this.charactersDbUrl = charactersDbUrl;
 	}
 	public HashMap<String, Integer> getRegions() {
 		return regions;

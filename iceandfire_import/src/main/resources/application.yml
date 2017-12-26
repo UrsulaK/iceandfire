@@ -1,8 +1,10 @@
 iceandfire:
     houses:
         baseUrl: https://www.anapioficeandfire.com/api/houses/
+        dbUrl: http://localhost:8082/houses
     characters:
         baseUrl: https://www.anapioficeandfire.com/api/characters/
+        dbUrl: http://localhost:8082/swornMembers
     regions:
         The North: 7
         Iron Islands: 4
@@ -13,3 +15,4 @@ iceandfire:
         The Reach: 8
         The Stormlands: 4
         Dorne: 3
+        

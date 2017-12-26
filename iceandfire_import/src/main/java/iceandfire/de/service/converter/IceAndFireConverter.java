@@ -6,8 +6,9 @@ import org.springframework.stereotype.Component;
 
 import iceandfire.de.service.api.ApiCharacter;
 import iceandfire.de.service.api.ApiHouse;
-import iceandfire.de.service.db.House;
-import iceandfire.de.service.db.SwornMember;
+import iceandfire.de.service.model.House;
+import iceandfire.de.service.model.SwornMember;
+
 
 @Component
 public class IceAndFireConverter {
@@ -31,6 +32,7 @@ public class IceAndFireConverter {
 	public SwornMember convertApiCharacterToSwornMember(ApiCharacter character){
 		SwornMember swornMember = new SwornMember();
 		swornMember.setId(getIdFromUrl(character.getUrl()));
+		swornMember.setGender(character.getGender());
 		swornMember.setAliases(character.getAliases());
 		swornMember.setBorn(character.getBorn());
 		swornMember.setCulture(character.getCulture());

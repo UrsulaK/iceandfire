@@ -27,13 +27,14 @@ import iceandfire.de.service.api.ApiCharacter;
 import iceandfire.de.service.api.ApiHouse;
 import iceandfire.de.service.configuration.IceAndFireConfig;
 import iceandfire.de.service.converter.IceAndFireConverter;
-import iceandfire.de.service.db.House;
-import iceandfire.de.service.db.SwornMember;
+import iceandfire.de.service.model.House;
+import iceandfire.de.service.model.SwornMember;
+
 
 @Service
-public class IceAndFireService {
+public class IceAndFireImportService {
 
-	private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(IceAndFireService.class);
+	private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(IceAndFireImportService.class);
 	
 	@Autowired
 	@Qualifier("restTemplate")
@@ -126,14 +127,14 @@ public class IceAndFireService {
 					if(character != null){
 						SwornMember swornMember = converter.convertApiCharacterToSwornMember(character);
 						
-						ResponseEntity<SwornMember> responseEntity = postIceAndFireType("http://localhost:8082/swornMembers", swornMember, SwornMember.class);
+						ResponseEntity<SwornMember> responseEntity = postIceAndFireType(iceAndFireConfig.getCharactersDbUrl(), swornMember, SwornMember.class);
 						if(responseEntity != null){
 							String location = responseEntity.getHeaders().getLocation().toString();
 							house.getSwornMembers().add(location);
 						}
 					}
 				}
-				postIceAndFireType("http://localhost:8082/houses", house, House.class);
+				postIceAndFireType(iceAndFireConfig.getHousesDbUrl(), house, House.class);
 				houses.add(house);
 				
 			}

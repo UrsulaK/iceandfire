@@ -10,7 +10,9 @@ repositories {
 	mavenCentral()
     jcenter()
 }
-
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.1'
+}
 // In this section you declare the dependencies for your production and test code
 dependencies {
   
@@ -26,9 +28,9 @@ dependencies {
   	
   	compile 'com.google.guava:guava:23.0'
     compile 'org.slf4j:slf4j-api:1.7.21'
-
     testCompile 'junit:junit:4.12'
 }
+
 
 jar {
 	baseName = 'iceandfire_import'
