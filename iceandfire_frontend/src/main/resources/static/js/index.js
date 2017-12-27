@@ -16,7 +16,7 @@ $(document).ready(function(){
 		$("#pager").empty();
 		$("#character").empty();
 
-		var baseUrlSearch = "http://localhost:8084/iceandfire/houses/search/";
+		var baseUrlSearch = "/service/houses/search/";
 		var baseUrl = "";
 		var name = $("#house").val();
 		var region = $( "#region option:selected" ).text();
@@ -93,7 +93,7 @@ $(document).ready(function(){
 		$("#characterPager").empty();
 		
 
-		var baseUrlSearch = "http://localhost:8084/iceandfire/swornMembers/";
+		var baseUrlSearch = "/service/swornMembers/";
 		
 		var name = $("#character").val();
 	
@@ -158,7 +158,7 @@ $(document).ready(function(){
 	var load = function(){
 		
 		$("#response").empty();
-		var importUrl = "http://localhost:8080/iceandfire/import";
+		var importUrl = "/iceandfire/import";
 
 		$.get(importUrl, function(data) {
 			

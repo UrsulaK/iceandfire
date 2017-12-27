@@ -1,3 +1,11 @@
+spring:
+  application: 
+    name: iceandfire_import
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
 iceandfire:
     houses:
         baseUrl: https://www.anapioficeandfire.com/api/houses/

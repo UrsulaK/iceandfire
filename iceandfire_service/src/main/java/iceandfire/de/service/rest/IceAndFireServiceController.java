@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import iceandfire.de.service.implementation.IceAndFireSearch;
 
 @RestController
-@RequestMapping("/iceandfire")
+@RequestMapping("/service")
 public class IceAndFireServiceController {
 
 	@Autowired

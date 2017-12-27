@@ -1,5 +1,13 @@
 server:
-  port: 8084
+  port: ${server_port:8084}
+
+spring:
+  application: 
+    name: iceandfire_service
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
 
 iceandfire:
     houses:
