@@ -18,6 +18,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.google.common.net.UrlEscapers;
+
 import iceandfire.de.service.config.IceAndFireConfiguration;
 import iceandfire.de.service.model.House;
 
@@ -58,22 +60,30 @@ public class IceAndFireSearch {
 	}
 	
 	public <T> ResponseEntity<Object> searchHousesByName(String name, String page, String size){
-		
-		String url = iceAndFireConfiguration.getHousesDbUrl() + "findByNameLike?name=" + name + "&page=" + page + "&size=" + size;
+		String encodedName = UrlEscapers.urlFragmentEscaper().escape(name);
+		String url = iceAndFireConfiguration.getHousesDbUrl() + "findByNameLike?name=" + encodedName + "&page=" + page + "&size=" + size;
 		ResponseEntity<Object> responseEntity = searchForIceAndFireType(url, Object.class);
 		
 		return responseEntity;
 	}
 	public <T> ResponseEntity<Object> searchHousesByRegion(String region, String page, String size){
+		String encodedRegion = UrlEscapers.urlFragmentEscaper().escape(region);
+		String url = iceAndFireConfiguration.getHousesDbUrl() + "findByRegionLike?region=" + encodedRegion + "&page=" + page + "&size=" + size;
+		ResponseEntity<Object> responseEntity = searchForIceAndFireType(url, Object.class);
 		
-		String url = iceAndFireConfiguration.getHousesDbUrl() + "findByRegionLike?region=" + region + "&page=" + page + "&size=" + size;
+		return responseEntity;
+	}
+	public <T> ResponseEntity<Object> searchHousesByNameAndByRegion(String name, String region, String page, String size){
+		String encodedRegion = UrlEscapers.urlFragmentEscaper().escape(region);
+		String encodedName = UrlEscapers.urlFragmentEscaper().escape(name);
+		String url = iceAndFireConfiguration.getHousesDbUrl() + "findByNameLikeAndRegionLike?name=" + encodedName+ "&region=" + encodedRegion + "&page=" + page + "&size=" + size;
 		ResponseEntity<Object> responseEntity = searchForIceAndFireType(url, Object.class);
 		
 		return responseEntity;
 	}
 	public <T> ResponseEntity<Object> searchSwornMembersByName(String name, String page, String size){
-		
-		String url = iceAndFireConfiguration.getHousesDbUrl() + "findByNameLike?name=" + name + "&page=" + page + "&size=" + size;
+		String encodedName = UrlEscapers.urlFragmentEscaper().escape(name);
+		String url = iceAndFireConfiguration.getSwornMembersDbUrl() + "findByNameLike?name=" + encodedName + "&page=" + page + "&size=" + size;
 		ResponseEntity<Object> responseEntity = searchForIceAndFireType(url, Object.class);
 		
 		return responseEntity;

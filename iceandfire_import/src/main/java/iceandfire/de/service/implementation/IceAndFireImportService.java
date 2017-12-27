@@ -3,6 +3,7 @@ package iceandfire.de.service.implementation;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,12 +31,11 @@ import iceandfire.de.service.converter.IceAndFireConverter;
 import iceandfire.de.service.model.House;
 import iceandfire.de.service.model.SwornMember;
 
-
 @Service
 public class IceAndFireImportService {
 
 	private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(IceAndFireImportService.class);
-	
+
 	@Autowired
 	@Qualifier("restTemplate")
 	private RestTemplate restTemplate;
@@ -44,24 +44,26 @@ public class IceAndFireImportService {
 
 	@Autowired
 	IceAndFireConfig iceAndFireConfig;
-	
+
 	@SuppressWarnings("unchecked")
-	public <T> T getIceAndFireType(final String url, final Class<T> apiClass){
+	public <T> T getIceAndFireTypeFromApi(final String url, final Class<T> apiClass) {
 		try {
 			UriComponentsBuilder componentsBuilder = UriComponentsBuilder.fromHttpUrl(url);
 			UriComponents components = componentsBuilder.build(true);
 			URI uri = components.toUri();
-			
+
 			HttpHeaders headers = new HttpHeaders();
 			headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-			headers.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
+			headers.add("user-agent",
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
 			HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
 
 			ResponseEntity<T[]> response = (ResponseEntity<T[]>) restTemplate.exchange(uri, HttpMethod.GET, entity, apiClass);
-			if(response.getStatusCode().equals(HttpStatus.OK)){
+			if (response.getStatusCode().equals(HttpStatus.OK)) {
 				return (T) response.getBody();
-			}else{
-				LOG.info("not possible to get Objetc from url: " + url + " and object type: " + apiClass.getName() + " Status Code: " + response.getStatusCode() );
+			} else {
+				LOG.info("not possible to get Objetc from url: " + url + " and object type: " + apiClass.getName()
+						+ " Status Code: " + response.getStatusCode());
 				return null;
 			}
 		} catch (Exception e) {
@@ -69,89 +71,125 @@ public class IceAndFireImportService {
 		}
 		return null;
 	}
-	public <T> ResponseEntity<T> postIceAndFireType(final String url, Object request, final Class<T> apiClass){
+
+	public <T> ResponseEntity<T> postIceAndFireType(final String url, Object request, final Class<T> apiClass) {
 		try {
 			UriComponentsBuilder componentsBuilder = UriComponentsBuilder.fromHttpUrl(url);
 			UriComponents components = componentsBuilder.build(true);
 			URI uri = components.toUri();
 			ResponseEntity<T> response = restTemplate.postForEntity(uri, request, apiClass);
-			if(response.getStatusCode().equals(HttpStatus.CREATED)){
+			if (response.getStatusCode().equals(HttpStatus.CREATED)) {
 				return response;
-			}else{
-				LOG.info("not possible to get Objetc from url: " + url + " and object type: " + apiClass.getName() + " Status Code: " + response.getStatusCode() );
+			} else {
+				LOG.info("not possible to get Objetc from url: " + url + " and object type: " + apiClass.getName()
+						+ " Status Code: " + response.getStatusCode());
 				return null;
 			}
-			
-			
+
 		} catch (Exception e) {
-			LOG.error("Error on post request for Object with url: " + url + " and object type: " + apiClass.getName(), e);
+			LOG.error("Error on post request for Object with url: " + url + " and object type: " + apiClass.getName(),
+					e);
 		}
-		
+
 		return null;
 	}
-	public ApiHouse getHouseById(String id){
-		
-		String url = iceAndFireConfig.getHousesBaseUrl() + id;
-		ApiHouse house = getIceAndFireType(url, ApiHouse.class);
-		
+//	public <T> T  getIceAndFireType(final String url, final Class<T> apiClass) {
+//		try {
+//			UriComponentsBuilder componentsBuilder = UriComponentsBuilder.fromHttpUrl(url);
+//			UriComponents components = componentsBuilder.build(true);
+//			URI uri = components.toUri();
+//			
+//			HttpHeaders headers = new HttpHeaders();
+//			headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+//			
+//			HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+//
+//			ResponseEntity<T[]> response = (ResponseEntity<T[]>) restTemplate.exchange(uri, HttpMethod.GET, entity, apiClass);
+//			if(response.getStatusCode().equals(HttpStatus.OK)){
+//				return (T) response.getBody();
+//			}else{
+//				LOG.info("not possible to get Objetc from url: " + url + " and object type: " + apiClass.getName() + " Status Code: " + response.getStatusCode() );
+//				return null;
+//			}
+//		} catch (Exception e) {
+//			LOG.error("Error on getting Object with url: " + url + " and object type: " + apiClass.getName(), e);
+//		}
+//		return null;
+//	}
+	public Object getHouseById(String id) {
+
+		String url = iceAndFireConfig.getHousesDbUrl() + "/" + id;
+		Object house = getIceAndFireTypeFromApi(url, Object.class);
+
 		return house;
 	}
-	
-	public iceandfire.de.service.api.ApiCharacter getCharacter(String url){
-		iceandfire.de.service.api.ApiCharacter character = getIceAndFireType(url, iceandfire.de.service.api.ApiCharacter.class);
+
+	public iceandfire.de.service.api.ApiCharacter getCharacter(String url) {
+		iceandfire.de.service.api.ApiCharacter character = getIceAndFireTypeFromApi(url,
+				iceandfire.de.service.api.ApiCharacter.class);
 		return character;
 	}
-	
-	public List<ApiHouse> searchHousesByRegion(String region, String page, String pageSize){
+
+	public List<ApiHouse> searchHousesByRegion(String region, String page, String pageSize) {
 		String encodedRegion = "";
-		
+
 		encodedRegion = UrlEscapers.urlFragmentEscaper().escape(region);
 
-		String url = iceAndFireConfig.getHousesBaseUrl() + "?region=" + encodedRegion + "&page=" + page + "&pageSize=" + pageSize;
-		
-		ApiHouse[] houses = getIceAndFireType(url, ApiHouse[].class);
-		if(houses != null){
+		String url = iceAndFireConfig.getHousesBaseUrl() + "?region=" + encodedRegion + "&page=" + page + "&pageSize="
+				+ pageSize;
+
+		ApiHouse[] houses = getIceAndFireTypeFromApi(url, ApiHouse[].class);
+		if (houses != null) {
 			return Arrays.asList(houses);
 		}
 		return null;
 	}
-	
-	public List<House> getHousesByRegion(String region, String page, String pageSize){
+
+	public List<House> getHousesByRegion(String region, String page, String pageSize) {
 		List<House> houses = new ArrayList<>();
 		List<ApiHouse> apiHouses = searchHousesByRegion(region, page, pageSize);
-		if(apiHouses != null){
-			for(ApiHouse apiHouse : apiHouses){
+		if (apiHouses != null) {
+			for (ApiHouse apiHouse : apiHouses) {
 				House house = converter.convertApiHouseToHouse(apiHouse);
-				for(String url : apiHouse.getSwornMembers()){
+				for (String url : apiHouse.getSwornMembers()) {
 					ApiCharacter character = getCharacter(url);
-					if(character != null){
+					if (character != null) {
 						SwornMember swornMember = converter.convertApiCharacterToSwornMember(character);
-						
-						ResponseEntity<SwornMember> responseEntity = postIceAndFireType(iceAndFireConfig.getCharactersDbUrl(), swornMember, SwornMember.class);
-						if(responseEntity != null){
-							String location = responseEntity.getHeaders().getLocation().toString();
-							house.getSwornMembers().add(location);
+
+						ResponseEntity<SwornMember> responseEntity = postIceAndFireType(
+								iceAndFireConfig.getCharactersDbUrl(), swornMember, SwornMember.class);
+						if (responseEntity != null) {
+							// String location =
+							// responseEntity.getHeaders().getLocation().toString();
+							house.getSwornMembers().put(swornMember.getId(), swornMember.getName());
 						}
 					}
 				}
 				postIceAndFireType(iceAndFireConfig.getHousesDbUrl(), house, House.class);
 				houses.add(house);
-				
+
 			}
 		}
 		return houses;
 	}
-	
-	public boolean importFireAndIceData(){
-		
-		Map<String, Integer> regions = iceAndFireConfig.getRegions();
-		
-			for(String region : regions.keySet()){
-				for(int i=1; i<= regions.get(region); i++){
+
+	public Map<String, String> importFireAndIceData() {
+		Map<String, String> response = new HashMap<>();
+		if(getHouseById("1") != null){
+			response.put("message", "Daten sind bereits importiert.");
+		} else {
+			Map<String, Integer> regions = iceAndFireConfig.getRegions();
+
+			for (String region : regions.keySet()) {
+				for (int i = 1; i <= regions.get(region); i++) {
 					String page = String.valueOf(i);
 					getHousesByRegion(region, page, "10");
 				}
 			}
-		return true;
-	}
+			response.put("message", "Daten erfolgreich importiert");
+			
+		}
+		return response;
+	}	
+
 }

@@ -22,15 +22,6 @@ public class IceAndFireController {
 	@Autowired
 	private IceAndFireImportService iceAndFireService;
 	
-	@CrossOrigin
-	@RequestMapping(value="/houses/house/{id}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<?> getHouseById(@PathVariable(name = "id", required = true) final String id){
-		
-		
-		return Optional.ofNullable(iceAndFireService.getHouseById(id))
-				.map(result -> new ResponseEntity<>(result, HttpStatus.OK))
-				.orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
-	}
 	
 	
 	@CrossOrigin
@@ -63,4 +54,6 @@ public class IceAndFireController {
 		
 		return new ResponseEntity<>(iceAndFireService.importFireAndIceData(), HttpStatus.OK);
 	}
+	
+	
 }

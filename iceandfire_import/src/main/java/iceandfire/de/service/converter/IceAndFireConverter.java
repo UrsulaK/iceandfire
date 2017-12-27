@@ -1,6 +1,7 @@
 package iceandfire.de.service.converter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.stereotype.Component;
 
@@ -22,7 +23,7 @@ public class IceAndFireConverter {
 		house.setFounder(apiHouse.getFounder());
 		house.setName(apiHouse.getName());
 		house.setRegion(apiHouse.getRegion());
-		house.setSwornMembers(new ArrayList<>());
+		house.setSwornMembers(new HashMap<>());
 		house.setTitles(apiHouse.getTitles());
 		house.setUrl(apiHouse.getUrl());
 		house.setWords(apiHouse.getWords());

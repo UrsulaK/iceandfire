@@ -1,6 +1,7 @@
 package iceandfire.de.db.service.model;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -19,7 +20,7 @@ public class House {
 	private String currentLord;
 	private String founder;
 	
-	private List<String> swornMembers;
+	private Map<String, String> swornMembers;
 	
 	public String getId() {
 		return id;
@@ -75,13 +76,11 @@ public class House {
 	public void setFounder(String founder) {
 		this.founder = founder;
 	}
-	public List<String> getSwornMembers() {
+	public Map<String, String> getSwornMembers() {
 		return swornMembers;
 	}
-	public void setSwornMembers(List<String> swornMembers) {
+	public void setSwornMembers(Map<String, String> swornMembers) {
 		this.swornMembers = swornMembers;
 	}
-	
-	
 	
 }

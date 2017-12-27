@@ -22,8 +22,9 @@ public class IceAndFireServiceController {
 	IceAndFireSearch iceAndFireSearch;
 	
 	@CrossOrigin
-	@RequestMapping(value="/houses/{name}/{page}/{pageSize}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<?> getHousesByName(@PathVariable(name = "name", required = true) final String name,
+	@RequestMapping(value="/houses/search/name/{name}/{page}/{pageSize}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<?> getHousesByName(
+			@PathVariable(name = "name", required = true) final String name,
 			@PathVariable(name = "page", required = true) final String page,
 			@PathVariable(name = "pageSize", required = true) final String pageSize){
 		
@@ -33,8 +34,9 @@ public class IceAndFireServiceController {
 	}
 	
 	@CrossOrigin
-	@RequestMapping(value="/houses/{region}/{page}/{pageSize}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<?> getHousesByRegion(@PathVariable(name = "region", required = true) final String region,
+	@RequestMapping(value="/houses/search/region/{region}/{page}/{pageSize}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<?> getHousesByRegion(
+			@PathVariable(name = "region", required = true) final String region,
 			@PathVariable(name = "page", required = true) final String page,
 			@PathVariable(name = "pageSize", required = true) final String pageSize){
 		
@@ -42,10 +44,22 @@ public class IceAndFireServiceController {
 		return Optional.ofNullable(iceAndFireSearch.searchHousesByRegion(region, page, pageSize))
 				.orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
 	}
-	
 	@CrossOrigin
-	@RequestMapping(value="/houses/{name}/{page}/{pageSize}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<?> getSwornMembersByName(@PathVariable(name = "name", required = true) final String name,
+	@RequestMapping(value="/houses/search/{name}/{region}/{page}/{pageSize}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<?> getHousesByNameAndByRegion(
+			@PathVariable(name = "name", required = true) final String name,
+			@PathVariable(name = "region", required = true) final String region,
+			@PathVariable(name = "page", required = true) final String page,
+			@PathVariable(name = "pageSize", required = true) final String pageSize){
+		
+		
+		return Optional.ofNullable(iceAndFireSearch.searchHousesByNameAndByRegion(name, region, page, pageSize))
+				.orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+	}
+	@CrossOrigin
+	@RequestMapping(value="/swornMembers/{name}/{page}/{pageSize}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<?> getSwornMembersByName(
+			@PathVariable(name = "name", required = true) final String name,
 			@PathVariable(name = "page", required = true) final String page,
 			@PathVariable(name = "pageSize", required = true) final String pageSize){
 		

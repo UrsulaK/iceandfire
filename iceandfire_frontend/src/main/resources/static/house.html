@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Ice and Fire</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+		<script type="text/javascript" src="/webjars/jquery/2.2.4/jquery.min.js"></script>
+		<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/js/index.js"></script>
+	</head>
+<body>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand" href="#">Ice and Fire</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li><a href="index.html">Home</a></li>
+	      <li class="active"><a href="house.html">Häuser</a></li>
+	      <li><a href="character.html">Charaktere</a></li>
+	      
+	    </ul>
+	  </div>
+	</nav>
+	<div class="jumbotron">
+		<div class="container">
+			<h1>A Song of Ice and Fire Houses</h1>
+		</div>
+	</div>
+	<div class="container">
+		<h2>Suche nach Häusern</h2>
+		<div class="form-group">
+			<label for="region">Region auswählen</label> 
+			<select class="form-control" id="region">
+				<option value="default">Bitte Region auswählen</option>
+				<option value="north">The North</option>
+				<option value="iron">Iron Islands</option>
+				<option value="vale">The Vale</option>
+				<option value="westerlands">The Westerlands</option>
+				<option value="crownlands">The Crownlands</option>
+				<option value="reach">The Reach</option>
+				<option value="stormlands">The Stormlands</option>
+				<option value="dorne">Dorne</option>
+			</select>
+		</div>
+		<div class="form-group">
+		  <label for="house">Name</label>
+		  <input type="text" class="form-control" id="house">
+		</div>
+		<div class="row">
+			<div class="col-sm-2">
+				<a id="searchHouses" class="btn btn-success" >
+					<span class="glyphicon glyphicon-search"> Suchen</span>
+				</a>
+			
+			</div>
+		
+		</div>
+		
+		<div>&#160;</div>
+		<table class="table table-striped">
+			<tbody id="content"></tbody>
+		</table>
+	</div>
+	<div class="container">
+		<ul class="pagination" id="pager">
+		</ul>
+	</div>
+</body>
+
+</html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Fire and Ice</title>
+		<title>Ice and Fire</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
@@ -16,33 +16,43 @@
 	      <a class="navbar-brand" href="#">Ice and Fire</a>
 	    </div>
 	    <ul class="nav navbar-nav">
-	      <li class="active"><a href="index.html">Home</a></li>
+	      <li><a href="index.html">Home</a></li>
 	      <li><a href="house.html">Häuser</a></li>
-	      <li><a href="character.html">Charaktere</a></li>
+	      <li class="active"><a href="character.html">Charaktere</a></li>
 	      
 	    </ul>
 	  </div>
 	</nav>
 	<div class="jumbotron">
 		<div class="container">
-			<h1>A Song of Ice and Fire Import</h1>
+			<h1>A Song of Ice and Fire Characters</h1>
 		</div>
 	</div>
 	<div class="container">
-		<h2>Datenimport von https://www.anapioficeandfire.com/</h2>
+		<h2>Suche nach Charakteren</h2>
+		
+		<div class="form-group">
+		  <label for="character">Name des Charakters</label>
+		  <input type="text" class="form-control" id="character">
+		</div>
 		<div class="row">
 			<div class="col-sm-2">
-				<a id="import" class="btn btn-success" >
-					<span class="glyphicons glyphicons-download-alt">Daten Import</span>
+				<a id="searchCharacter" class="btn btn-success" >
+					<span class="glyphicon glyphicon-search"> Suchen</span>
 				</a>
-			</div>
 			
+			</div>
+		
 		</div>
-		<div class="row">
-			<div id="response" class="col-sm-6"></div>
-		</div>
+		<div>&#160;</div>
+		<table class="table table-striped">
+			<tbody id="characterContent"></tbody>
+		</table>
 	</div>
-	
+	<div class="container">
+		<ul class="pagination" id="characterPager">
+		</ul>
+	</div>
 </body>
 
 </html>
