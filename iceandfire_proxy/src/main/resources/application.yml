@@ -14,11 +14,13 @@ zuul:
   routes:
     frontend:
       path: /**
-      url: http://localhost:8081/
+      service-id: iceandfire_frontend
     import:
       path: /iceandfire/**
-      url: http://localhost:8080/iceandfire
+      service-id: iceandfire_import
+      strip-prefix: false
     service:
       path: /service/**
-      url: http://localhost:8084/service
+      service-id: iceandfire_service
+      strip-prefix: false
     
