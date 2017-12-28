@@ -43,16 +43,16 @@ $(document).ready(function(){
 			$.get(url, function(data) {
 				console.log(data);
 				
-				for(var i=0; i<data._embedded.houses.length; i++){
+				for(var i=0; i<data.houseList.length; i++){
 					
 					var tr = $("<tr/>");
 					var td = $("<td/>");
-					td.append($("<div class='lead' />").text(data._embedded.houses[i].name));
-					td.append($("<div />").text(data._embedded.houses[i].coatOfArms));
-					td.append($("<div class='text-muted' />").text(data._embedded.houses[i].words));
+					td.append($("<div class='lead' />").text(data.houseList[i].name));
+					td.append($("<div />").text(data.houseList[i].coatOfArms));
+					td.append($("<div class='text-muted' />").text(data.houseList[i].words));
 					
 					var td2 = $("<td/>")
-					var swornMembers = data._embedded.houses[i].swornMembers;
+					var swornMembers = data.houseList[i].swornMembers;
 					Object.keys(swornMembers).forEach(function (key) {
 						
 						td2.append($("<div class='text-muted' id='"+ key + "' />").text(swornMembers[key]));
@@ -112,16 +112,16 @@ $(document).ready(function(){
 			$.get(url, function(data) {
 				console.log(data);
 				
-				for(var i=0; i<data._embedded.swornMembers.length; i++){
+				for(var i=0; i<data.swornMemberList.length; i++){
 					
 					var tr = $("<tr/>");
 					var td = $("<td/>");
-					td.append($("<div class='lead' />").text(data._embedded.swornMembers[i].name));
-					td.append($("<div />").text(data._embedded.swornMembers[i].gender));
-					td.append($("<div class='text-muted' />").text(data._embedded.swornMembers[i].culture));
+					td.append($("<div class='lead' />").text(data.swornMemberList[i].name));
+					td.append($("<div />").text(data.swornMemberList[i].gender));
+					td.append($("<div class='text-muted' />").text(data.swornMemberList[i].culture));
 					
 					var td2 = $("<td/>")
-					var aliases = data._embedded.swornMembers[i].aliases;
+					var aliases = data.swornMemberList[i].aliases;
 					for(var j = 0; j < aliases.length; j++){
 						td2.append($("<div class='text-muted' />").text(aliases[j]));
 					}

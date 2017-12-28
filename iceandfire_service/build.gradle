@@ -26,8 +26,11 @@ repositories {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-cache')
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-hateoas')
 	compile group: 'org.springframework', name: 'spring-oxm', version: '4.3.12.RELEASE'
 	compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka', version: '1.3.6.RELEASE'
+	compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-feign', version: '1.3.6.RELEASE'
+	
 	compile 'com.google.guava:guava:23.0'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
