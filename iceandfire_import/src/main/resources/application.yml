@@ -1,6 +1,6 @@
 spring:
   application: 
-    name: iceandfire_import
+    name: iceandfire-import
 eureka:
   client:
     service-url:
