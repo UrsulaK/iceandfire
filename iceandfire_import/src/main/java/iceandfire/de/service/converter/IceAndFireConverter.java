@@ -1,10 +1,8 @@
 package iceandfire.de.service.converter;
 
-import java.util.ArrayList;
+
 import java.util.HashMap;
-
 import org.springframework.stereotype.Component;
-
 import iceandfire.de.service.api.ApiCharacter;
 import iceandfire.de.service.api.ApiHouse;
 import iceandfire.de.service.model.House;
