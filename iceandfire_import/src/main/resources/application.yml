@@ -9,10 +9,10 @@ eureka:
 iceandfire:
     houses:
         baseUrl: https://www.anapioficeandfire.com/api/houses/
-        dbUrl: http://localhost:8082/houses
+        dbUrl: http://iceandfiredb/houses
     characters:
         baseUrl: https://www.anapioficeandfire.com/api/characters/
-        dbUrl: http://localhost:8082/swornMembers
+        dbUrl: http://iceandfiredb/swornMembers
     regions:
         The North: 7
         Iron Islands: 4

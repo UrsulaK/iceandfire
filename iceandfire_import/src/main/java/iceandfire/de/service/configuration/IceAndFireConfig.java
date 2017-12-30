@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -42,6 +43,7 @@ public class IceAndFireConfig {
 	
 	@Primary
 	@Bean("restTemplate")
+	@LoadBalanced
 	public RestTemplate getRestTemplate(){
 		RestTemplate restTemplate = new RestTemplate();
 		List<HttpMessageConverter<?>> converters = new ArrayList<>();

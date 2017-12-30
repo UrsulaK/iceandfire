@@ -14,7 +14,7 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 60000
+            timeoutInMilliseconds: 120000
 
 zuul:
   routes:
@@ -23,7 +23,7 @@ zuul:
       service-id: iceandfire_frontend
     import:
       path: /iceandfire/**
-      service-id: iceandfire_import
+      service-id: iceandfire-import
       strip-prefix: false
     service:
       path: /service/**

@@ -93,29 +93,7 @@ public class IceAndFireImportService {
 
 		return null;
 	}
-//	public <T> T  getIceAndFireType(final String url, final Class<T> apiClass) {
-//		try {
-//			UriComponentsBuilder componentsBuilder = UriComponentsBuilder.fromHttpUrl(url);
-//			UriComponents components = componentsBuilder.build(true);
-//			URI uri = components.toUri();
-//			
-//			HttpHeaders headers = new HttpHeaders();
-//			headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-//			
-//			HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-//
-//			ResponseEntity<T[]> response = (ResponseEntity<T[]>) restTemplate.exchange(uri, HttpMethod.GET, entity, apiClass);
-//			if(response.getStatusCode().equals(HttpStatus.OK)){
-//				return (T) response.getBody();
-//			}else{
-//				LOG.info("not possible to get Objetc from url: " + url + " and object type: " + apiClass.getName() + " Status Code: " + response.getStatusCode() );
-//				return null;
-//			}
-//		} catch (Exception e) {
-//			LOG.error("Error on getting Object with url: " + url + " and object type: " + apiClass.getName(), e);
-//		}
-//		return null;
-//	}
+
 	public Object getHouseById(String id) {
 
 		String url = iceAndFireConfig.getHousesDbUrl() + "/" + id;

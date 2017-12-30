@@ -9,14 +9,12 @@ buildscript {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 	}
 }
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.1'
-}
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
-group = 'iceandfire'
+group = 'iceandfire.de.springbootadmin.service'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
@@ -27,10 +25,6 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '1.5.9.RELEASE'
-	compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka', version: '1.3.6.RELEASE'
-	compile group: 'de.codecentric', name: 'spring-boot-admin-starter-client', version: '1.2.3'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
-	compile group: 'org.webjars', name: 'jquery', version: '2.2.4'
-	compile group: 'org.webjars', name: 'bootstrap', version: '3.3.7'
+	compile group: 'de.codecentric', name: 'spring-boot-admin-server', version: '1.5.6'
 }
