@@ -1,6 +1,12 @@
 spring:
   application: 
     name: iceandfire-import
+  boot:
+    admin:
+      url: http://localhost:8088
+management:
+  security:
+    enabled: false
 eureka:
   client:
     service-url:

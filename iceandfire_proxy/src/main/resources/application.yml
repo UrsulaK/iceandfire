@@ -3,7 +3,13 @@ server:
 
 spring:
   application: 
-    name: iceandfire_proxy
+    name: iceandfire-proxy
+  boot:
+    admin:
+      url: http://localhost:8088
+management:
+  security:
+    enabled: false
 eureka:
   client:
     service-url:
@@ -20,13 +26,13 @@ zuul:
   routes:
     frontend:
       path: /**
-      service-id: iceandfire_frontend
+      service-id: iceandfire-frontend
     import:
       path: /iceandfire/**
       service-id: iceandfire-import
       strip-prefix: false
     service:
       path: /service/**
-      service-id: iceandfire_service
+      service-id: iceandfire-service
       strip-prefix: false
     
