@@ -34,15 +34,23 @@ import iceandfire.de.service.model.SwornMember;
 public class IceAndFireImportService {
 
 	private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(IceAndFireImportService.class);
+	private Map<String, Class> failedDownloads = new HashMap<>();
 
 	@Autowired
 	@Qualifier("restTemplate")
 	private RestTemplate restTemplate;
+	
+	@Autowired
+	@Qualifier("apiRestTemplate")
+	private RestTemplate apiRestTemplate;
+	
 	@Autowired
 	private IceAndFireConverter converter;
 
 	@Autowired
-	IceAndFireConfig iceAndFireConfig;
+	private IceAndFireConfig iceAndFireConfig;
+	
+	private boolean dataIsImported = false;
 
 	@SuppressWarnings("unchecked")
 	public <T> T getIceAndFireTypeFromApi(final String url, final Class<T> apiClass) {
@@ -57,7 +65,7 @@ public class IceAndFireImportService {
 					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
 			HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
 
-			ResponseEntity<T[]> response = (ResponseEntity<T[]>) restTemplate.exchange(uri, HttpMethod.GET, entity, apiClass);
+			ResponseEntity<T[]> response = (ResponseEntity<T[]>) apiRestTemplate.exchange(uri, HttpMethod.GET, entity, apiClass);
 			if (response.getStatusCode().equals(HttpStatus.OK)) {
 				return (T) response.getBody();
 			} else {
@@ -93,13 +101,6 @@ public class IceAndFireImportService {
 		return null;
 	}
 
-	public Object getHouseById(String id) {
-
-		String url = iceAndFireConfig.getHousesDbUrl() + "/" + id;
-		Object house = getIceAndFireTypeFromApi(url, Object.class);
-
-		return house;
-	}
 
 	public iceandfire.de.service.api.ApiCharacter getCharacter(String url) {
 		iceandfire.de.service.api.ApiCharacter character = getIceAndFireTypeFromApi(url,
@@ -152,7 +153,7 @@ public class IceAndFireImportService {
 
 	public Map<String, String> importFireAndIceData() {
 		Map<String, String> response = new HashMap<>();
-		if(getHouseById("1") != null){
+		if(dataIsImported){
 			response.put("message", "Daten sind bereits importiert.");
 		} else {
 			Map<String, Integer> regions = iceAndFireConfig.getRegions();
@@ -163,8 +164,8 @@ public class IceAndFireImportService {
 					getHousesByRegion(region, page, "10");
 				}
 			}
-			response.put("message", "Daten erfolgreich importiert");
-			
+			response.put("message", "Daten wurden erfolgreich importiert.");
+			dataIsImported = true;
 		}
 		return response;
 	}	

@@ -1,0 +1,21 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: iceandfiredb
+  boot:
+    admin:
+      url:  ${ADMIN_URL:http://localhost:8088}
+  data:
+    mongodb:
+      host: ${MONGODB_HOST:localhost}
+      port: 27017
+      database: fireandice
+management:
+  security:
+    enabled: false
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVICE_URL:http://localhost:8761}/eureka/
+  

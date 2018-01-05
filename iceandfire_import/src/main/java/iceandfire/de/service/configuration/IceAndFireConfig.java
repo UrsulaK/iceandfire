@@ -56,6 +56,20 @@ public class IceAndFireConfig {
         ((SimpleClientHttpRequestFactory) restTemplate.getRequestFactory()).setReadTimeout(15000);
 		return restTemplate;
 	}
+	@Primary
+	@Bean("apiRestTemplate")
+	public RestTemplate getApiRestTemplate(){
+		RestTemplate restTemplate = new RestTemplate();
+		List<HttpMessageConverter<?>> converters = new ArrayList<>();
+		converters.add(new MappingJackson2HttpMessageConverter());
+		converters.add(new FormHttpMessageConverter());
+		converters.add(new StringHttpMessageConverter());
+		converters.add(getMarshallingHttpMessageConverter());
+		restTemplate.setMessageConverters(converters);
+		((SimpleClientHttpRequestFactory) restTemplate.getRequestFactory()).setConnectTimeout(15000);
+        ((SimpleClientHttpRequestFactory) restTemplate.getRequestFactory()).setReadTimeout(15000);
+		return restTemplate;
+	}
 	@Bean("marshallingHttpMessageConverter")
 	public MarshallingHttpMessageConverter getMarshallingHttpMessageConverter() {
 		MarshallingHttpMessageConverter converter = new MarshallingHttpMessageConverter();

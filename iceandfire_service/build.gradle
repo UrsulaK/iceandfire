@@ -4,24 +4,40 @@ buildscript {
 	}
 	repositories {
 		mavenCentral()
+		maven {
+	      url "https://plugins.gradle.org/m2/"
+	    }
+	    
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath "gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.17.2"
 	}
 }
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.1'
+    gradleVersion = '4.4.1'
 }
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'com.palantir.docker'
 
 group = 'iceandfire.de.service'
-version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
+jar {
+	baseName = 'iceandfire-service'
+	version = '0.0.1-SNAPSHOT'
+}
+docker {
+    name "${jar.baseName}"
+    files jar.archivePath
+    buildArgs(['JAR_FILE': "${jar.archiveName}"])
+}
 repositories {
 	mavenCentral()
+	jcenter()
 }
 
 
@@ -30,6 +46,8 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-starter-hateoas')
+	compile('io.dropwizard.metrics:metrics-core:3.1.0')
+	compile('io.dropwizard.metrics:metrics-graphite:3.1.2')
 	compile group: 'org.springframework', name: 'spring-oxm', version: '4.3.12.RELEASE'
 	compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka', version: '1.3.6.RELEASE'
 	compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-feign', version: '1.3.6.RELEASE'

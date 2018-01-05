@@ -1,0 +1,116 @@
+version: '2'
+services:
+  mongodb:
+    image: tutum/mongodb
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    environment:
+      - AUTH=no
+  discovery:
+    image: iceandfire-discovery
+    container_name: discovery
+    ports: 
+      - 8761:8761
+    environment:
+      - EUREKA_INSTANCE_PREFERIPADDRESS=true
+  springbootadmin:
+    image: iceandfire/springbootadmin
+    container_name: springbootadmin
+    ports:
+      - 8088:8088
+    links:
+      - discovery
+    depends_on:
+      - discovery
+    environment:
+      - EUREKA_SERVICE_URL=http://discovery:8761
+      - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
+  iceandfiredb:
+    image: iceandfire/iceandfire-db
+    container_name: iceandfiredb
+    ports: 
+      - 8082:8082
+    links:
+      - mongodb
+      - springbootadmin
+      - discovery
+    depends_on:
+      - mongodb
+      - springbootadmin
+      - discovery
+    environment:
+      - EUREKA_SERVICE_URL=http://discovery:8761
+      - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
+      - ADMIN_URL=http://springbootadmin:8088
+      - MONGODB_HOST=mongodb
+  import:
+    image: iceandfire/iceandfire-import
+    container_name: import
+    ports: 
+      - 8080:8080
+    links:
+      - springbootadmin
+      - discovery
+      - iceandfiredb
+    depends_on:
+      - springbootadmin
+      - discovery
+      - iceandfiredb
+    environment:
+      - EUREKA_SERVICE_URL=http://discovery:8761
+      - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
+      - ADMIN_URL=http://springbootadmin:8088
+  service:
+    image: iceandfire-service
+    container_name: service
+    ports: 
+      - 8084:8084
+    links:
+      - springbootadmin
+      - discovery
+      - iceandfiredb
+    depends_on:
+      - springbootadmin
+      - discovery
+      - iceandfiredb
+    environment:
+      - EUREKA_SERVICE_URL=http://discovery:8761
+      - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
+      - ADMIN_URL=http://springbootadmin:8088
+  frontend:
+    image: iceandfire/iceandfire-frontend
+    container_name: frontend
+    ports: 
+      - 8083:8083
+    links:
+      - springbootadmin
+      - discovery
+    depends_on:
+      - springbootadmin
+      - discovery
+    environment:
+      - EUREKA_SERVICE_URL=http://discovery:8761
+      - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
+      - ADMIN_URL=http://springbootadmin:8088
+  proxy:
+    image: iceandfire-proxy
+    container_name: proxy
+    ports: 
+      - 8000:8000
+    links:
+      - springbootadmin
+      - discovery
+      - import
+      - service
+      - frontend
+    depends_on:
+      - springbootadmin
+      - discovery
+      - import
+      - service
+      - frontend
+    environment:
+      - EUREKA_SERVICE_URL=http://discovery:8761
+      - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
+      - ADMIN_URL=http://springbootadmin:8088

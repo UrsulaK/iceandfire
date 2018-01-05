@@ -4,22 +4,35 @@ buildscript {
 	}
 	repositories {
 		mavenCentral()
+		maven {
+	      url "https://plugins.gradle.org/m2/"
+	    }
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath "gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.17.2"
 	}
 }
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.1'
+    gradleVersion = '4.4.1'
 }
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'com.palantir.docker'
 
-group = 'iceandfire.de.proxy.service'
-version = '0.0.1-SNAPSHOT'
+group = 'iceandfire'
+
 sourceCompatibility = 1.8
-
+jar {
+	baseName = 'iceandfire-proxy'
+	version = '0.0.1-SNAPSHOT'
+}
+docker {
+    name "${jar.baseName}"
+    files jar.archivePath
+    buildArgs(['JAR_FILE': "${jar.archiveName}"])
+}
 repositories {
 	mavenCentral()
 }
