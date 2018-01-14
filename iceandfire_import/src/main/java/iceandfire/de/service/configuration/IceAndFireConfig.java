@@ -50,7 +50,6 @@ public class IceAndFireConfig {
 		converters.add(new MappingJackson2HttpMessageConverter());
 		converters.add(new FormHttpMessageConverter());
 		converters.add(new StringHttpMessageConverter());
-		converters.add(getMarshallingHttpMessageConverter());
 		restTemplate.setMessageConverters(converters);
 		((SimpleClientHttpRequestFactory) restTemplate.getRequestFactory()).setConnectTimeout(15000);
         ((SimpleClientHttpRequestFactory) restTemplate.getRequestFactory()).setReadTimeout(15000);
@@ -64,26 +63,13 @@ public class IceAndFireConfig {
 		converters.add(new MappingJackson2HttpMessageConverter());
 		converters.add(new FormHttpMessageConverter());
 		converters.add(new StringHttpMessageConverter());
-		converters.add(getMarshallingHttpMessageConverter());
 		restTemplate.setMessageConverters(converters);
-		((SimpleClientHttpRequestFactory) restTemplate.getRequestFactory()).setConnectTimeout(15000);
-        ((SimpleClientHttpRequestFactory) restTemplate.getRequestFactory()).setReadTimeout(15000);
+		((SimpleClientHttpRequestFactory) restTemplate.getRequestFactory()).setConnectTimeout(30000);
+        ((SimpleClientHttpRequestFactory) restTemplate.getRequestFactory()).setReadTimeout(30000);
 		return restTemplate;
 	}
-	@Bean("marshallingHttpMessageConverter")
-	public MarshallingHttpMessageConverter getMarshallingHttpMessageConverter() {
-		MarshallingHttpMessageConverter converter = new MarshallingHttpMessageConverter();
-		converter.setMarshaller(getJaxb2Marshaller());
-		converter.setUnmarshaller(getJaxb2Marshaller());
-		return converter;
-	}
-	@Bean("jaxb2Marshaller")
-	public Jaxb2Marshaller getJaxb2Marshaller(){
-		Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
-		jaxb2Marshaller.setPackagesToScan("iceandfire.de.service.api");
-		
-		return jaxb2Marshaller;
-	}
+
+
 	public String getHousesBaseUrl() {
 		return housesBaseUrl;
 	}

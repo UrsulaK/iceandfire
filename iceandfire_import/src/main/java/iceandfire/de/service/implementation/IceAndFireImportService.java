@@ -34,8 +34,7 @@ import iceandfire.de.service.model.SwornMember;
 public class IceAndFireImportService {
 
 	private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(IceAndFireImportService.class);
-	private Map<String, Class> failedDownloads = new HashMap<>();
-
+	
 	@Autowired
 	@Qualifier("restTemplate")
 	private RestTemplate restTemplate;
