@@ -21,7 +21,7 @@ public class GraphiteConfiguration {
 
     @PostConstruct
     public void initialize() {
-        final Graphite graphite = new Graphite(new InetSocketAddress("127.0.0.1", 2003));
+        final Graphite graphite = new Graphite(new InetSocketAddress("grafana", 2003));
         final GraphiteReporter reporter = GraphiteReporter.forRegistry(registry)
                 .prefixedWith("iceandfire.service")
                 .convertRatesTo(TimeUnit.SECONDS)
