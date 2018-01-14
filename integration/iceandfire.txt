@@ -1,0 +1,36 @@
+docker run -p 27017:27017 --name mongo -d mongo
+  
+  docker run -p 8761:8761 --name discovery -d iceandfire-discovery
+
+  docker run -p 8088:8088 --name springbootadmin --link discovery --env EUREKA_SERVICE_URL=http://discovery:8761 -d iceandfire/springbootadmin
+ 
+  docker run -p 8082:8082 --name iceandfiredb --link mongo --link springbootadmin --link discovery --env EUREKA_SERVICE_URL=http://discovery:8761 --env ADMIN_URL=http://springbootadmin:8088 --env MONGODB_HOST=mongo -d iceandfire/iceandfire-db
+  
+  docker run -p 8080:8080 --name import --link springbootadmin --link discovery --link iceandfiredb --env EUREKA_SERVICE_URL=http://discovery:8761 --env ADMIN_URL=http://springbootadmin:8088 -d iceandfire/iceandfire-import
+  
+  docker run -p 8084:8084 --name service --link springbootadmin --link discovery --link iceandfiredb --env EUREKA_SERVICE_URL=http://discovery:8761 --env ADMIN_URL=http://springbootadmin:8088 -d iceandfire-service
+  
+  docker run -p 8083:8083 --name frontend --link springbootadmin --link discovery --env EUREKA_SERVICE_URL=http://discovery:8761 --env ADMIN_URL=http://springbootadmin:8088 -d iceandfire/iceandfire-frontend
+  
+  docker run -p 8000:8000 --name proxy --link springbootadmin --link discovery --link frontend --link import --link service --env EUREKA_SERVICE_URL=http://discovery:8761 --env ADMIN_URL=http://springbootadmin:8088 -d iceandfire-proxy
+  
+  
+  docker run -d\
+  --name graphite\
+  --restart=always\
+  -p 80:80\
+  -p 2003-2004:2003-2004\
+  -p 2023-2024:2023-2024\
+  -p 8125:8125/udp\
+  -p 8126:8126\
+  graphiteapp/graphite-statsd
+  
+  docker run \
+  --detach \
+   --publish=80:80 \
+   --publish=81:81 \
+   --publish 2003:2003\
+   --publish=8125:8125/udp \
+   --publish=8126:8126 \
+   --name kamon-grafana-dashboard \
+   kamon/grafana_graphite

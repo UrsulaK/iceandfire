@@ -1,5 +1,15 @@
 version: '2'
 services:
+  grafana:
+    image: kamon/grafana
+    container_name: grafana
+    restart: always
+    ports:
+      - 80:80
+      - 81:81
+      - 2003:2003
+      - 8125:8125/udp
+      - 8126:8126
   mongodb:
     image: tutum/mongodb
     container_name: mongodb
