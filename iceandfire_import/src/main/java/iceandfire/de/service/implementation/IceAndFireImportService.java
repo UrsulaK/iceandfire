@@ -151,10 +151,18 @@ public class IceAndFireImportService {
 	}
 
 	public Map<String, String> importFireAndIceData() {
+		boolean test = true;
 		Map<String, String> response = new HashMap<>();
 		if(dataIsImported){
 			response.put("message", "Daten sind bereits importiert.");
 		} else {
+			if(test){
+				try {
+					Thread.sleep(15000);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 			Map<String, Integer> regions = iceAndFireConfig.getRegions();
 
 			for (String region : regions.keySet()) {
