@@ -14,7 +14,16 @@ docker run -p 27017:27017 --name mongo -d mongo
   
   docker run -p 8000:8000 --name proxy --link springbootadmin --link discovery --link frontend --link import --link service --env EUREKA_SERVICE_URL=http://discovery:8761 --env ADMIN_URL=http://springbootadmin:8088 -d iceandfire-proxy
   
-  
+### DOCKER COMMANDS ###
+
+Stop all containers
+docker stop $(docker ps -a -q)
+Remove all containers
+docker rm $(docker ps -a -q)
+Remove all images
+docker rmi $(docker images -q)
+
+ 
   docker run -d\
   --name graphite\
   --restart=always\

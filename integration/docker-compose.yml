@@ -45,6 +45,7 @@ services:
       - mongodb
       - springbootadmin
       - discovery
+      - grafana
     depends_on:
       - mongodb
       - springbootadmin
@@ -63,6 +64,7 @@ services:
       - springbootadmin
       - discovery
       - iceandfiredb
+      - grafana
     depends_on:
       - springbootadmin
       - discovery
@@ -84,6 +86,7 @@ services:
       - springbootadmin
       - discovery
       - iceandfiredb
+      - grafana
     environment:
       - EUREKA_SERVICE_URL=http://discovery:8761
       - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
@@ -96,6 +99,7 @@ services:
     links:
       - springbootadmin
       - discovery
+      - grafana
     depends_on:
       - springbootadmin
       - discovery
