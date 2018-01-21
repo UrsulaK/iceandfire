@@ -4,9 +4,6 @@ server:
 spring:
   application: 
     name: iceandfire-proxy
-  boot:
-    admin:
-      url: ${ADMIN_URL:http://localhost:8088}
 management:
   security:
     enabled: false

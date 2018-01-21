@@ -1,0 +1,71 @@
+docker network create iceandfirenet
+docker run -d\
+   -p 80:80 \
+   -p 81:81 \
+   -p 2003:2003\
+   -p 8125:8125/udp \
+   -p 8126:8126 \
+   --net=iceandfirenet \
+   --name grafana \
+   kamon/grafana_graphite
+   
+docker run -d\
+   -p 27017:27017 \
+   -p 28017:28017 \
+   --net=iceandfirenet\
+   --name mongo \
+   -e AUTH=no\
+   tutum/mongodb
+ 
+docker run -d \
+   -p 8761:8761 \
+   --net=iceandfirenet\
+   --name discovery \
+   iceandfire-discovery
+ 
+docker run -d\
+   -p 8088:8088 \
+   --net=iceandfirenet\
+   --name springbootadmin \
+   --env EUREKA_SERVICE_URL=http://discovery:8761 \
+   iceandfire/springbootadmin
+   
+docker run -d\
+    -p 8082:8082 \
+    --net=iceandfirenet\
+    --name iceandfiredb \
+    --env EUREKA_SERVICE_URL=http://discovery:8761 \
+    --env ADMIN_URL=http://springbootadmin:8088 \
+    --env MONGODB_HOST=mongo \
+    iceandfire/iceandfire-db
+    
+docker run -d\
+    -p 8080:8080 \
+    --net=iceandfirenet\
+    --name import \
+    --env EUREKA_SERVICE_URL=http://discovery:8761 \
+    --env ADMIN_URL=http://springbootadmin:8088 \
+    iceandfire/iceandfire-import  
+
+docker run -d\
+    -p 8084:8084 \
+    --net=iceandfirenet\
+    --name service \
+    --env EUREKA_SERVICE_URL=http://discovery:8761 \
+    --env ADMIN_URL=http://springbootadmin:8088 \
+    iceandfire-service
+
+docker run -d\
+    -p 8083:8083 \
+    --net=iceandfirenet \
+    --name frontend \
+    --env EUREKA_SERVICE_URL=http://discovery:8761\
+    --env ADMIN_URL=http://springbootadmin:8088 \
+    iceandfire/iceandfire-frontend
+ 
+ docker run -d\
+    -p 8000:8000 \
+    --net=iceandfirenet \
+    --name proxy \
+    --env EUREKA_SERVICE_URL=http://discovery:8761 \
+    iceandfire-proxy

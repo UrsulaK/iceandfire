@@ -151,7 +151,7 @@ public class IceAndFireImportService {
 	}
 
 	public Map<String, String> importFireAndIceData() {
-		boolean test = true;
+		boolean test = false;
 		Map<String, String> response = new HashMap<>();
 		if(dataIsImported){
 			response.put("message", "Daten sind bereits importiert.");
@@ -162,15 +162,17 @@ public class IceAndFireImportService {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			}
-			Map<String, Integer> regions = iceAndFireConfig.getRegions();
+			}else{
+				Map<String, Integer> regions = iceAndFireConfig.getRegions();
 
-			for (String region : regions.keySet()) {
-				for (int i = 1; i <= regions.get(region); i++) {
-					String page = String.valueOf(i);
-					getHousesByRegion(region, page, "10");
+				for (String region : regions.keySet()) {
+					for (int i = 1; i <= regions.get(region); i++) {
+						String page = String.valueOf(i);
+						getHousesByRegion(region, page, "10");
+					}
 				}
 			}
+			
 			response.put("message", "Daten wurden erfolgreich importiert.");
 			dataIsImported = true;
 		}

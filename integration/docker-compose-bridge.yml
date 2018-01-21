@@ -1,29 +1,76 @@
 version: '2'
 services:
-  proxy:
-    image: iceandfire-proxy
-    container_name: proxy
-    ports: 
-      - 8000:8000
+  grafana:
+    hostname: grafana
+    image: kamon/grafana_graphite
+    container_name: grafana
+    restart: always
+    ports:
+      - 80:80
+      - 81:81
+      - 2003:2003
+      - 8125:8125/udp
+      - 8126:8126
+    expose:
+      - 2003
+  mongo:
+    image: tutum/mongodb
+    container_name: mongo
+    ports:
+      - 27017:27017
+      - 28017:28017
     networks:
       - iceandfirenet
+    environment:
+      - AUTH=no
+  discovery:
+    image: iceandfire-discovery
+    container_name: discovery
+    ports: 
+      - 8761:8761
+    environment:
+      - EUREKA_INSTANCE_PREFERIPADDRESS=true
+  springbootadmin:
+    image: iceandfire/springbootadmin
+    container_name: springbootadmin
+    ports:
+      - 8088:8088
+    links:
+      - discovery
     depends_on:
+      - discovery
+    environment:
+      - EUREKA_SERVICE_URL=http://discovery:8761
+      - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
+  iceandfiredb:
+    image: iceandfire/iceandfire-db
+    container_name: iceandfiredb
+    ports: 
+      - 8082:8082
+    links:
+      - mongo
       - springbootadmin
       - discovery
-      - import
-      - service
-      - frontend
+      - grafana
+    depends_on:
+      - mongo
+      - springbootadmin
+      - discovery
     environment:
       - EUREKA_SERVICE_URL=http://discovery:8761
       - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
       - ADMIN_URL=http://springbootadmin:8088
+      - MONGODB_HOST=mongo
   import:
     image: iceandfire/iceandfire-import
     container_name: import
     ports: 
       - 8080:8080
-    networks:
-      - iceandfirenet
+    links:
+      - springbootadmin
+      - discovery
+      - iceandfiredb
+      - grafana
     depends_on:
       - springbootadmin
       - discovery
@@ -37,8 +84,10 @@ services:
     container_name: service
     ports: 
       - 8084:8084
-    networks:
-      - iceandfirenet
+    links:
+      - springbootadmin
+      - discovery
+      - iceandfiredb
     depends_on:
       - springbootadmin
       - discovery
@@ -53,8 +102,10 @@ services:
     container_name: frontend
     ports: 
       - 8083:8083
-    networks:
-      - iceandfirenet
+    links:
+      - springbootadmin
+      - discovery
+      - grafana
     depends_on:
       - springbootadmin
       - discovery
@@ -62,67 +113,27 @@ services:
       - EUREKA_SERVICE_URL=http://discovery:8761
       - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
       - ADMIN_URL=http://springbootadmin:8088
-  iceandfiredb:
-    image: iceandfire/iceandfire-db
-    container_name: iceandfiredb
+  proxy:
+    image: iceandfire-proxy
+    container_name: proxy
     ports: 
-      - 8082:8082
-    networks:
-      - iceandfirenet
-    depends_on:
-      - mongo
+      - 8000:8000
+    links:
       - springbootadmin
       - discovery
+      - import
+      - service
+      - frontend
+    depends_on:
+      - springbootadmin
+      - discovery
+      - import
+      - service
+      - frontend
     environment:
       - EUREKA_SERVICE_URL=http://discovery:8761
       - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
       - ADMIN_URL=http://springbootadmin:8088
-      - MONGODB_HOST=mongo
-  springbootadmin:
-    image: iceandfire/springbootadmin
-    container_name: springbootadmin
-    ports:
-      - 8088:8088
-    networks:
-      - iceandfirenet
-    depends_on:
-      - discovery
-    environment:
-      - EUREKA_SERVICE_URL=http://discovery:8761
-      - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true   
-  discovery:
-    image: iceandfire-discovery
-    container_name: discovery
-    ports: 
-      - 8761:8761
-    networks:
-      - iceandfirenet
-    environment:
-      - EUREKA_INSTANCE_PREFERIPADDRESS=true 
-  grafana:
-    hostname: grafana
-    image: kamon/grafana_graphite
-    container_name: grafana
-    restart: always
-    ports:
-      - 80:80
-      - 81:81
-      - 2003:2003
-      - 8125:8125/udp
-      - 8126:8126
-    networks:
-      - iceandfirenet
-    expose:
-      - 2003
-  mongo:
-    image: tutum/mongodb
-    container_name: mongo
-    ports:
-      - 27017:27017
-      - 28017:28017
-    networks:
-      - iceandfirenet
-    environment:
-      - AUTH=no
+      
 networks:
   iceandfirenet:

@@ -21,7 +21,8 @@ public class GraphiteConfiguration {
 
     @PostConstruct
     public void initialize() {
-        final Graphite graphite = new Graphite(new InetSocketAddress("grafana", 2003));
+        final Graphite graphite = new Graphite(new InetSocketAddress("grafana", 2003)); // running in docker
+        //final Graphite graphite = new Graphite(new InetSocketAddress("192.168.99.100", 2003)); //running locally
         final GraphiteReporter reporter = GraphiteReporter.forRegistry(registry)
                 .prefixedWith("iceandfire.service")
                 .convertRatesTo(TimeUnit.SECONDS)
